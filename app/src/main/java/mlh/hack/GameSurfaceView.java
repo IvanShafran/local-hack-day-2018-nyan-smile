@@ -10,6 +10,8 @@ import java.util.Random;
 
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
 
+    private static final int speedMult = 4;
+
     private SurfaceHolder surfaceHolder = null;
 
 
@@ -237,19 +239,19 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private void drawClouds() {
         canvas.drawBitmap(cloudOne, cloudOneX, screenHeight / 10, null);
-        cloudOneX -= 2;
+        cloudOneX -= 2 * speedMult;
         if (cloudOneX < -100) {
             cloudOneX = screenWidth;
         }
 
         canvas.drawBitmap(cloudTwo, cloudTwoX, screenHeight / 15, null);
-        cloudTwoX -= 4;
+        cloudTwoX -= 4 * speedMult;
         if (cloudTwoX < -100) {
             cloudTwoX = screenWidth;
         }
 
         canvas.drawBitmap(cloudThree, cloudThreeX, screenHeight / 5, null);
-        cloudThreeX -= 3;
+        cloudThreeX -= 3 * speedMult;
         if (cloudThreeX < -100) {
             cloudThreeX = screenWidth;
         }
@@ -291,11 +293,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         float nyanCatHead = nyanCatX + nyanCat1.getWidth();
         if (nyanCatHead - 5 > cakeX && nyanCatX < cakeX && isSmiling == isCakeUp) {
             cakeX = -200;
-            score += 1;
+            if (isBlink) {
+                score += 2;
+            } else {
+                score += 1;
+            }
             return;
         }
 
-        cakeX -= 3;
+        cakeX -= 3 * speedMult;
         if (cakeX < -500) {
             cakeX = screenWidth;
 
@@ -327,11 +333,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         float nyanCatHead = nyanCatX + nyanCat1.getWidth();
         if (nyanCatHead - 5 > dogX && nyanCatX < dogX && isSmiling == isDogUp) {
             dogX = -300;
-            score -= 1;
+            if (isBlink) {
+                score -= 2;
+            } else {
+                score -= 1;
+            }
             return;
         }
 
-        dogX -= 4;
+        dogX -= 4 * speedMult;
         if (dogX < -600) {
             dogX = screenWidth;
             isDogUp = random.nextBoolean();
@@ -340,7 +350,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private void drawRoad() {
         canvas.drawBitmap(road, roadX, screenHeight * 0.65f, null);
-        roadX -= 3;
+        roadX -= 3 * speedMult;
         if (roadX < -screenWidth) {
             roadX = 0;
         }
