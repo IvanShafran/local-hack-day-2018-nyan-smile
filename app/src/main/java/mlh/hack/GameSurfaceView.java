@@ -40,6 +40,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Bitmap cloudThree;
     private int cloudThreeX = 300;
 
+    private Bitmap cake;
+    private int cakeX = -100;
+    private boolean isCakeUp = false;
+
     private Bitmap nyanCat;
     private int nyanCatX = 30;
 
@@ -111,6 +115,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.nyan_cat);
         nyanCat = Bitmap.createScaledBitmap(raw, screenWidth / 5, screenHeight / 5, true);
+
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.cake);
+        cake = Bitmap.createScaledBitmap(raw, screenWidth / 10, screenHeight / 10, true);
     }
 
     @Override
@@ -152,6 +159,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             drawClouds();
             drawSun();
             drawScore();
+            drawCake();
             drawNyanCat();
 
             // Send message to main UI thread to update the drawing to the main view special area.
@@ -216,14 +224,36 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     private void drawNyanCat() {
-        float y = 0;
-        if (isSmiling) {
-            y = screenHeight * 0.45f;
-        } else {
-            y = screenHeight * 0.68f;
-        }
+        float y = getYForRoad(isSmiling);
 
         canvas.drawBitmap(nyanCat, nyanCatX, y, null);
+    }
+
+    private void drawCake() {
+        float y = getYForRoad(isCakeUp) + screenHeight / 20;
+
+        canvas.drawBitmap(cake, cakeX, y, null);
+
+        float nyanCatHead = nyanCatX + nyanCat.getWidth();
+        if (nyanCatHead - 5 > cakeX && nyanCatX < cakeX && isSmiling == isCakeUp) {
+            cakeX = -200;
+            score += 1;
+            return;
+        }
+
+        cakeX -= 3;
+        if (cakeX < -500) {
+            cakeX = screenWidth;
+            isCakeUp = !isCakeUp;
+        }
+    }
+
+    private float getYForRoad(boolean isUp) {
+        if (isUp) {
+            return screenHeight * 0.45f;
+        } else {
+            return screenHeight * 0.68f;
+        }
     }
 
 }
