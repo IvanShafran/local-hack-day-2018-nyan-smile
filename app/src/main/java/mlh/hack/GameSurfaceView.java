@@ -49,7 +49,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private int nyanCatFrame = 0;
     private int nyanCatX = 30;
 
-    private Bitmap dog;
+    private Bitmap dog1;
+    private Bitmap dog2;
+    private int dogFrame = 0;
     private boolean isDogUp = true;
     private int dogX = -300;
 
@@ -125,8 +127,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.nyan_cat_2);
         nyanCat2 = Bitmap.createScaledBitmap(raw, screenWidth / 5, screenHeight / 5, true);
 
-        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.nyan_dog);
-        dog = Bitmap.createScaledBitmap(raw, screenWidth / 5 + 10, screenHeight / 5 + 10, true);
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.dog_1);
+        dog1 = Bitmap.createScaledBitmap(raw, screenWidth / 5, screenHeight / 5, true);
+
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.dog_2);
+        dog2 = Bitmap.createScaledBitmap(raw, screenWidth / 5, screenHeight / 5, true);
 
         raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.cake);
         cake = Bitmap.createScaledBitmap(raw, screenWidth / 10, screenHeight / 10, true);
@@ -272,6 +277,16 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private void drawDog() {
         float y = getYForRoad(isDogUp);
+
+        Bitmap dog;
+
+        dogFrame += 1;
+        dogFrame %= 10;
+        if (dogFrame < 5) {
+            dog = dog1;
+        } else {
+            dog = dog2;
+        }
 
         canvas.drawBitmap(dog, dogX, y, null);
 
