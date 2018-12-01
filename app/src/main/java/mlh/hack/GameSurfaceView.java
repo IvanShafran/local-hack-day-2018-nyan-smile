@@ -33,6 +33,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Bitmap smileBlink;
     private Bitmap notSmileNotBlink;
     private Bitmap smileNotBlink;
+    private Bitmap cloudOne;
+    private int cloudOneX;
+    private Bitmap cloudTwo;
+    private int cloudTwoX = 100;
+    private Bitmap cloudThree;
+    private int cloudThreeX = 300;
 
     public static void setMimicks(boolean isSmilingNew, boolean isBlinkNew) {
         isSmiling = isSmilingNew;
@@ -82,6 +88,21 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.sun_smile_blink);
         smileBlink = Bitmap.createScaledBitmap(raw, sunSize, sunSize, true);
+
+        int cloudOneWidth = screenWidth / 10;
+        int cloudOneHeight = screenHeight / 10;
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.cloud_1);
+        cloudOne = Bitmap.createScaledBitmap(raw, cloudOneWidth, cloudOneHeight, true);
+
+        int cloudTwoWidth = screenWidth / 20;
+        int cloudTwoHeight = screenHeight / 20;
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.cloud_2);
+        cloudTwo = Bitmap.createScaledBitmap(raw, cloudTwoWidth, cloudTwoHeight, true);
+
+        int cloudThreeWidth = screenWidth / 15;
+        int cloudThreeHeight = screenHeight / 15;
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.cloud_3);
+        cloudThree = Bitmap.createScaledBitmap(raw, cloudThreeWidth, cloudThreeHeight, true);
     }
 
     @Override
@@ -120,6 +141,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
             loadBitmapsIfNeeded();
             drawBackground();
+            drawClouds();
             drawSun();
 
             // Send message to main UI thread to update the drawing to the main view special area.
@@ -152,6 +174,26 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         }
 
         canvas.drawBitmap(sun, screenWidth - sun.getWidth(), 0, null);
+    }
+
+    private void drawClouds() {
+        canvas.drawBitmap(cloudOne, cloudOneX, screenHeight / 10, null);
+        cloudOneX -= 2;
+        if (cloudOneX < -100) {
+            cloudOneX = screenWidth;
+        }
+
+        canvas.drawBitmap(cloudTwo, cloudTwoX, screenHeight / 15, null);
+        cloudTwoX -= 4;
+        if (cloudTwoX < -100) {
+            cloudTwoX = screenWidth;
+        }
+
+        canvas.drawBitmap(cloudThree, cloudThreeX, screenHeight / 5, null);
+        cloudThreeX -= 3;
+        if (cloudThreeX < -100) {
+            cloudThreeX = screenWidth;
+        }
     }
 
     private void drawBackground() {
