@@ -13,7 +13,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Thread thread = null;
 
     private Paint backgroundPaint = new Paint();
-    private Paint paint;
+    private Paint textPaint;
 
     // Record whether the child thread is running or not.
     private boolean threadRunning = false;
@@ -40,6 +40,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Bitmap cloudThree;
     private int cloudThreeX = 300;
 
+    private int score = 0;
+
     public static void setMimicks(boolean isSmilingNew, boolean isBlinkNew) {
         isSmiling = isSmilingNew;
         isBlink = isBlinkNew;
@@ -57,10 +59,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // Add current object as the callback listener.
         surfaceHolder.addCallback(this);
 
-        // Create the paint object which will draw the text.
-        paint = new Paint();
-        paint.setTextSize(100);
-        paint.setColor(Color.GREEN);
+        // Create the textPaint object which will draw the text.
+        textPaint = new Paint();
+        textPaint.setTextSize(100);
+        textPaint.setColor(Color.RED);
 
         // Set the SurfaceView object at the top of View object.
         setZOrderOnTop(true);
@@ -143,6 +145,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             drawBackground();
             drawClouds();
             drawSun();
+            drawScore();
 
             // Send message to main UI thread to update the drawing to the main view special area.
             surfaceHolder.unlockCanvasAndPost(canvas);
@@ -199,4 +202,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private void drawBackground() {
         canvas.drawBitmap(background, 0, 0, null);
     }
+
+    private void drawScore() {
+        String text = "Score: " + score;
+        canvas.drawText(text, 20, textPaint.getTextSize(), textPaint);
+    }
+
 }
