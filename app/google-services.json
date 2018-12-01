@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "193741978138",
+    "firebase_url": "https://mlhlocalhackday.firebaseio.com",
+    "project_id": "mlhlocalhackday",
+    "storage_bucket": "mlhlocalhackday.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193741978138:android:ff64c30538e36e65",
+        "android_client_info": {
+          "package_name": "mlh.hack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "193741978138-3lfmnteqmhsll2mkd1tj6dplhgesd0sj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mlh.hack",
+            "certificate_hash": "168cfa31db1b0e74c5c4e8d8c52bbb44424c0bad"
+          }
+        },
+        {
+          "client_id": "193741978138-5muli8qa103k6mm6m8urula6g12qshr3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwspSr5XTBahWm0QRcuC9J5u50wBLrinw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "193741978138-5muli8qa103k6mm6m8urula6g12qshr3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
