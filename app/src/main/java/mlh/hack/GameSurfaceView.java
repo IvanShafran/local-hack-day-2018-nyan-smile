@@ -1,10 +1,7 @@
 package mlh.hack;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
+import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -31,6 +28,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private volatile static boolean isBlink = false;
 
+    private Bitmap background;
+
     public static void setMimicks(boolean isSmilingNew, boolean isBlinkNew) {
         isSmiling = isSmilingNew;
         isBlink = isBlinkNew;
@@ -38,6 +37,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context);
+
 
         backgroundPaint.setColor(Color.BLUE);
         setFocusable(true);
@@ -58,6 +58,14 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         //setBackgroundColor(Color.RED);
     }
 
+    private void loadBitmapsIfNeeded() {
+        if (background != null) {
+            return;
+        }
+
+        Bitmap raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.background);
+        background = Bitmap.createScaledBitmap(raw, screenWidth, screenHeight, true);
+    }
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -93,6 +101,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             // Only draw text on the specified rectangle area.
             canvas = surfaceHolder.lockCanvas();
 
+            loadBitmapsIfNeeded();
             drawBackground();
             drawText();
 
@@ -107,9 +116,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     private void drawBackground() {
-        Rect rect = new Rect(0, 0, screenWidth, screenHeight);
-
-        canvas.drawRect(rect, backgroundPaint);
+        canvas.drawBitmap(background, 0, 0, null);
     }
 
     private void drawText() {
