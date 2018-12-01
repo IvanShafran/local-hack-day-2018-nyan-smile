@@ -289,7 +289,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         cakeX -= 3;
         if (cakeX < -500) {
             cakeX = screenWidth;
-            isCakeUp = !isCakeUp;
+
+            isCakeUp = random.nextBoolean();
 
             if (random.nextBoolean()) {
                 cake = cakePic;
@@ -324,7 +325,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         dogX -= 4;
         if (dogX < -600) {
             dogX = screenWidth;
-            isDogUp = !isDogUp;
+            isDogUp = random.nextBoolean();
         }
     }
 
