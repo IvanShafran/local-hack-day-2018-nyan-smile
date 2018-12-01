@@ -14,7 +14,6 @@
 package mlh.hack.facedetection;
 
 import android.graphics.Bitmap;
-import android.hardware.Camera;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -81,13 +80,13 @@ public class FaceDetectionProcessor extends VisionProcessorBase<List<FirebaseVis
 
             GameSurfaceView.setMimicks(isSmiling, isBlink);
 
-            int cameraFacing =
-                    frameMetadata != null ? frameMetadata.getCameraFacing() :
-                            Camera.CameraInfo.CAMERA_FACING_BACK;
-            FaceGraphic faceGraphic = new FaceGraphic(graphicOverlay, face, cameraFacing);
-            graphicOverlay.add(faceGraphic);
+//            int cameraFacing =
+//                    frameMetadata != null ? frameMetadata.getCameraFacing() :
+//                            Camera.CameraInfo.CAMERA_FACING_BACK;
+//            FaceGraphic faceGraphic = new FaceGraphic(graphicOverlay, face, cameraFacing);
+//            graphicOverlay.add(faceGraphic);
         }
-        graphicOverlay.postInvalidate();
+//        graphicOverlay.postInvalidate();
     }
 
     @Override
