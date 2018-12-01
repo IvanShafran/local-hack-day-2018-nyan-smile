@@ -44,7 +44,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private int cakeX = -100;
     private boolean isCakeUp = false;
 
-    private Bitmap nyanCat;
+    private Bitmap nyanCat1;
+    private Bitmap nyanCat2;
+    private int nyanCatFrame = 0;
     private int nyanCatX = 30;
 
     private Bitmap dog;
@@ -117,8 +119,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.cloud_3);
         cloudThree = Bitmap.createScaledBitmap(raw, cloudThreeWidth, cloudThreeHeight, true);
 
-        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.nyan_cat);
-        nyanCat = Bitmap.createScaledBitmap(raw, screenWidth / 5, screenHeight / 5, true);
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.nyan_cat_1);
+        nyanCat1 = Bitmap.createScaledBitmap(raw, screenWidth / 5, screenHeight / 5, true);
+
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.nyan_cat_2);
+        nyanCat2 = Bitmap.createScaledBitmap(raw, screenWidth / 5, screenHeight / 5, true);
 
         raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.nyan_dog);
         dog = Bitmap.createScaledBitmap(raw, screenWidth / 5 + 10, screenHeight / 5 + 10, true);
@@ -234,6 +239,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private void drawNyanCat() {
         float y = getYForRoad(isSmiling);
 
+        nyanCatFrame += 1;
+        nyanCatFrame %= 10;
+
+        Bitmap nyanCat;
+        if (nyanCatFrame < 5) {
+            nyanCat = nyanCat1;
+        } else {
+            nyanCat = nyanCat2;
+        }
         canvas.drawBitmap(nyanCat, nyanCatX, y, null);
     }
 
@@ -242,7 +256,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         canvas.drawBitmap(cake, cakeX, y, null);
 
-        float nyanCatHead = nyanCatX + nyanCat.getWidth();
+        float nyanCatHead = nyanCatX + nyanCat1.getWidth();
         if (nyanCatHead - 5 > cakeX && nyanCatX < cakeX && isSmiling == isCakeUp) {
             cakeX = -200;
             score += 1;
@@ -261,7 +275,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         canvas.drawBitmap(dog, dogX, y, null);
 
-        float nyanCatHead = nyanCatX + nyanCat.getWidth();
+        float nyanCatHead = nyanCatX + nyanCat1.getWidth();
         if (nyanCatHead - 5 > dogX && nyanCatX < dogX && isSmiling == isDogUp) {
             dogX = -300;
             score -= 1;
