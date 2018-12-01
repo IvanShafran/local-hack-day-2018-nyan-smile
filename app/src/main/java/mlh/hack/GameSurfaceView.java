@@ -40,6 +40,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Bitmap cloudThree;
     private int cloudThreeX = 300;
 
+    private Bitmap nyanCat;
+    private int nyanCatX = 30;
+
     private int score = 0;
 
     public static void setMimicks(boolean isSmilingNew, boolean isBlinkNew) {
@@ -105,6 +108,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         int cloudThreeHeight = screenHeight / 15;
         raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.cloud_3);
         cloudThree = Bitmap.createScaledBitmap(raw, cloudThreeWidth, cloudThreeHeight, true);
+
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.nyan_cat);
+        nyanCat = Bitmap.createScaledBitmap(raw, screenWidth / 5, screenHeight / 5, true);
     }
 
     @Override
@@ -146,6 +152,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             drawClouds();
             drawSun();
             drawScore();
+            drawNyanCat();
 
             // Send message to main UI thread to update the drawing to the main view special area.
             surfaceHolder.unlockCanvasAndPost(canvas);
@@ -206,6 +213,17 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private void drawScore() {
         String text = "Score: " + score;
         canvas.drawText(text, 20, textPaint.getTextSize(), textPaint);
+    }
+
+    private void drawNyanCat() {
+        float y = 0;
+        if (isSmiling) {
+            y = screenHeight * 0.45f;
+        } else {
+            y = screenHeight * 0.68f;
+        }
+
+        canvas.drawBitmap(nyanCat, nyanCatX, y, null);
     }
 
 }
