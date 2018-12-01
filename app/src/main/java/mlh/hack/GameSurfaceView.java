@@ -47,6 +47,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Bitmap nyanCat;
     private int nyanCatX = 30;
 
+    private Bitmap dog;
+    private boolean isDogUp = true;
+    private int dogX = -300;
+
     private int score = 0;
 
     public static void setMimicks(boolean isSmilingNew, boolean isBlinkNew) {
@@ -116,6 +120,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.nyan_cat);
         nyanCat = Bitmap.createScaledBitmap(raw, screenWidth / 5, screenHeight / 5, true);
 
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.nyan_dog);
+        dog = Bitmap.createScaledBitmap(raw, screenWidth / 5 + 10, screenHeight / 5 + 10, true);
+
         raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.cake);
         cake = Bitmap.createScaledBitmap(raw, screenWidth / 10, screenHeight / 10, true);
     }
@@ -161,6 +168,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             drawScore();
             drawCake();
             drawNyanCat();
+            drawDog();
 
             // Send message to main UI thread to update the drawing to the main view special area.
             surfaceHolder.unlockCanvasAndPost(canvas);
@@ -245,6 +253,25 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (cakeX < -500) {
             cakeX = screenWidth;
             isCakeUp = !isCakeUp;
+        }
+    }
+
+    private void drawDog() {
+        float y = getYForRoad(isDogUp);
+
+        canvas.drawBitmap(dog, dogX, y, null);
+
+        float nyanCatHead = nyanCatX + nyanCat.getWidth();
+        if (nyanCatHead - 5 > dogX && nyanCatX < dogX && isSmiling == isDogUp) {
+            dogX = -300;
+            score -= 1;
+            return;
+        }
+
+        dogX -= 4;
+        if (dogX < -600) {
+            dogX = screenWidth;
+            isDogUp = !isDogUp;
         }
     }
 
