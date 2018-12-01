@@ -29,6 +29,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private volatile static boolean isBlink = false;
 
     private Bitmap background;
+    private Bitmap notSmileBlink;
+    private Bitmap smileBlink;
+    private Bitmap notSmileNotBlink;
+    private Bitmap smileNotBlink;
 
     public static void setMimicks(boolean isSmilingNew, boolean isBlinkNew) {
         isSmiling = isSmilingNew;
@@ -65,6 +69,19 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         Bitmap raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.background);
         background = Bitmap.createScaledBitmap(raw, screenWidth, screenHeight, true);
+
+        int sunSize = screenHeight / 4;
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.sun_not_smile_blink);
+        notSmileBlink = Bitmap.createScaledBitmap(raw, sunSize, sunSize, true);
+
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.sun_not_smile_not_blink);
+        notSmileNotBlink = Bitmap.createScaledBitmap(raw, sunSize, sunSize, true);
+
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.sun_smile_not_blink);
+        smileNotBlink = Bitmap.createScaledBitmap(raw, sunSize, sunSize, true);
+
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.sun_smile_blink);
+        smileBlink = Bitmap.createScaledBitmap(raw, sunSize, sunSize, true);
     }
 
     @Override
@@ -103,7 +120,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
             loadBitmapsIfNeeded();
             drawBackground();
-            drawText();
+            drawSun();
 
             // Send message to main UI thread to update the drawing to the main view special area.
             surfaceHolder.unlockCanvasAndPost(canvas);
@@ -115,13 +132,29 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         }
     }
 
-    private void drawBackground() {
-        canvas.drawBitmap(background, 0, 0, null);
+    private void drawSun() {
+        Bitmap sun = smileNotBlink;
+
+        if (isSmiling && isBlink) {
+            sun = smileBlink;
+        }
+
+        if (isSmiling && !isBlink) {
+            sun = smileNotBlink;
+        }
+
+        if (!isSmiling && isBlink) {
+            sun = notSmileBlink;
+        }
+
+        if (!isSmiling && !isBlink) {
+            sun = notSmileNotBlink;
+        }
+
+        canvas.drawBitmap(sun, screenWidth - sun.getWidth(), 0, null);
     }
 
-    private void drawText() {
-        String text = Boolean.valueOf(isSmiling) + " " + Boolean.valueOf(isBlink);
-        // Draw text in the canvas.
-        canvas.drawText(text, 100, 100, paint);
+    private void drawBackground() {
+        canvas.drawBitmap(background, 0, 0, null);
     }
 }
