@@ -25,7 +25,7 @@
                 android:layout_alignParentBottom="true"/>
     </mlh.hack.CameraSourcePreview>
 
-    <SurfaceView
+    <mlh.hack.GameSurfaceView
             android:id="@+id/surfaceView"
             android:layout_weight="1"
             android:layout_width="match_parent"
