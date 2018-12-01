@@ -34,6 +34,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private volatile static boolean isBlink = false;
 
     private Bitmap background;
+    private Bitmap backgroundNight;
     private Bitmap notSmileBlink;
     private Bitmap smileBlink;
     private Bitmap notSmileNotBlink;
@@ -102,6 +103,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         Bitmap raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.background);
         background = Bitmap.createScaledBitmap(raw, screenWidth, screenHeight, true);
+
+
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.background_night);
+        backgroundNight = Bitmap.createScaledBitmap(raw, screenWidth, screenHeight, true);
 
         int sunSize = screenHeight / 4;
         raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.sun_not_smile_blink);
@@ -251,7 +256,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     private void drawBackground() {
-        canvas.drawBitmap(background, 0, 0, null);
+        if (isBlink) {
+            canvas.drawBitmap(backgroundNight, 0, 0, null);
+        } else {
+            canvas.drawBitmap(background, 0, 0, null);
+        }
     }
 
     private void drawScore() {
