@@ -55,6 +55,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private boolean isDogUp = true;
     private int dogX = -300;
 
+    private Bitmap road;
+    private int roadX = 0;
+
     private int score = 0;
 
     public static void setMimicks(boolean isSmilingNew, boolean isBlinkNew) {
@@ -135,6 +138,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.cake);
         cake = Bitmap.createScaledBitmap(raw, screenWidth / 10, screenHeight / 10, true);
+
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.road);
+        road = Bitmap.createScaledBitmap(raw, screenWidth * 2, screenHeight / 20, true);
     }
 
     @Override
@@ -173,6 +179,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
             loadBitmapsIfNeeded();
             drawBackground();
+            drawRoad();
             drawClouds();
             drawSun();
             drawScore();
@@ -301,6 +308,14 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (dogX < -600) {
             dogX = screenWidth;
             isDogUp = !isDogUp;
+        }
+    }
+
+    private void drawRoad() {
+        canvas.drawBitmap(road, roadX, screenHeight * 0.65f, null);
+        roadX -= 3;
+        if (roadX < -screenWidth) {
+            roadX = 0;
         }
     }
 
