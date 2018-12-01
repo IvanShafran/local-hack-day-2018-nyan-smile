@@ -16,16 +16,12 @@ package mlh.hack;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.*;
-import android.widget.AdapterView.OnItemSelectedListener;
 import com.google.android.gms.common.annotation.KeepName;
 import mlh.hack.facedetection.FaceDetectionProcessor;
 
@@ -38,10 +34,8 @@ import java.util.List;
  * set up continuous frame processing on frames from a camera source.
  */
 @KeepName
-public final class LivePreviewActivity extends AppCompatActivity
-        implements OnRequestPermissionsResultCallback,
-        OnItemSelectedListener,
-        CompoundButton.OnCheckedChangeListener {
+public final class LivePreviewActivity extends AppCompatActivity implements OnRequestPermissionsResultCallback {
+
     private static final String FACE_DETECTION = "Face Detection";
     private static final String TAG = "LivePreviewActivity";
     private static final int PERMISSION_REQUESTS = 1;
@@ -67,63 +61,11 @@ public final class LivePreviewActivity extends AppCompatActivity
             Log.d(TAG, "graphicOverlay is null");
         }
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        List<String> options = new ArrayList<>();
-        options.add(FACE_DETECTION);
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.spinner_style, options);
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // attaching data adapter to spinner
-        spinner.setAdapter(dataAdapter);
-        spinner.setOnItemSelectedListener(this);
-
-        ToggleButton facingSwitch = (ToggleButton) findViewById(R.id.facingSwitch);
-        facingSwitch.setOnCheckedChangeListener(this);
-        // Hide the toggle button if there is only 1 camera
-        if (Camera.getNumberOfCameras() == 1) {
-            facingSwitch.setVisibility(View.GONE);
-        }
-
         if (allPermissionsGranted()) {
             createCameraSource(selectedModel);
         } else {
             getRuntimePermissions();
         }
-    }
-
-    @Override
-    public synchronized void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-        selectedModel = parent.getItemAtPosition(pos).toString();
-        Log.d(TAG, "Selected model: " + selectedModel);
-        preview.stop();
-        if (allPermissionsGranted()) {
-            createCameraSource(selectedModel);
-            startCameraSource();
-        } else {
-            getRuntimePermissions();
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        // Do nothing.
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        Log.d(TAG, "Set facing");
-        if (cameraSource != null) {
-            if (isChecked) {
-                cameraSource.setFacing(CameraSource.CAMERA_FACING_FRONT);
-            } else {
-                cameraSource.setFacing(CameraSource.CAMERA_FACING_BACK);
-            }
-        }
-        preview.stop();
-        startCameraSource();
     }
 
     private void createCameraSource(String model) {
@@ -157,6 +99,7 @@ public final class LivePreviewActivity extends AppCompatActivity
                     Log.d(TAG, "resume: graphOverlay is null");
                 }
                 preview.start(cameraSource, graphicOverlay);
+                cameraSource.setFacing(CameraSource.CAMERA_FACING_FRONT);
             } catch (IOException e) {
                 Log.e(TAG, "Unable to start camera source.", e);
                 cameraSource.release();
