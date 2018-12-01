@@ -24,10 +24,7 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
-import mlh.hack.CameraImageGraphic;
-import mlh.hack.FrameMetadata;
-import mlh.hack.GraphicOverlay;
-import mlh.hack.VisionProcessorBase;
+import mlh.hack.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -77,6 +74,12 @@ public class FaceDetectionProcessor extends VisionProcessorBase<List<FirebaseVis
         }
         for (int i = 0; i < faces.size(); ++i) {
             FirebaseVisionFace face = faces.get(i);
+
+            boolean isSmiling = face.getSmilingProbability() > 0.7;
+            boolean isBlink = face.getLeftEyeOpenProbability() < 0.1
+                    || face.getRightEyeOpenProbability() < 0.1;
+
+            GameSurfaceView.setMimicks(isSmiling, isBlink);
 
             int cameraFacing =
                     frameMetadata != null ? frameMetadata.getCameraFacing() :

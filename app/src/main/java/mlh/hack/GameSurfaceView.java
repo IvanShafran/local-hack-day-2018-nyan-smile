@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -16,6 +15,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private Thread thread = null;
 
+    private Paint backgroundPaint = new Paint();
     private Paint paint;
 
     // Record whether the child thread is running or not.
@@ -23,19 +23,23 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
     private Canvas canvas = null;
 
-    private float textX = 0;
-
-    private float textY = 0;
-
-    private String text = "Hello!";
-
     private int screenWidth = 0;
 
     private int screenHeight = 0;
 
+    private volatile static boolean isSmiling = false;
+
+    private volatile static boolean isBlink = false;
+
+    public static void setMimicks(boolean isSmilingNew, boolean isBlinkNew) {
+        isSmiling = isSmilingNew;
+        isBlink = isBlinkNew;
+    }
+
     public GameSurfaceView(Context context, AttributeSet attrs) {
         super(context);
 
+        backgroundPaint.setColor(Color.BLUE);
         setFocusable(true);
 
         // Get SurfaceHolder object.
@@ -53,6 +57,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         //setBackgroundColor(Color.RED);
     }
+
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -85,74 +90,31 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     @Override
     public void run() {
         while (threadRunning) {
-            if (TextUtils.isEmpty(text)) {
-                text = "Input text in above text box.";
-            }
+            // Only draw text on the specified rectangle area.
+            canvas = surfaceHolder.lockCanvas();
 
-            long startTime = System.currentTimeMillis();
-
-            textX += 100;
-
-            textY += 100;
-
-            if (textX > screenWidth) {
-                textX = 0;
-            }
-
-            if (textY > screenHeight) {
-                textY = 0;
-            }
-
+            drawBackground();
             drawText();
 
-            long endTime = System.currentTimeMillis();
-
-            long deltaTime = endTime - startTime;
-
-            if (deltaTime < 200) {
-                try {
-                    Thread.sleep(200 - deltaTime);
-                } catch (InterruptedException ex) {
-
-                }
+            // Send message to main UI thread to update the drawing to the main view special area.
+            surfaceHolder.unlockCanvasAndPost(canvas);
+            try {
+                Thread.sleep(16);
+            } catch (InterruptedException ex) {
 
             }
         }
     }
 
-    private void drawText() {
-        int margin = 100;
+    private void drawBackground() {
+        Rect rect = new Rect(0, 0, screenWidth, screenHeight);
 
-        int left = margin;
-
-        int top = margin;
-
-        int right = screenWidth - margin;
-
-        int bottom = screenHeight - margin;
-
-        Rect rect = new Rect(left, top, right, bottom);
-
-        // Only draw text on the specified rectangle area.
-        canvas = surfaceHolder.lockCanvas(rect);
-
-        // Draw the specify canvas background color.
-        Paint backgroundPaint = new Paint();
-        backgroundPaint.setColor(Color.BLUE);
         canvas.drawRect(rect, backgroundPaint);
+    }
 
+    private void drawText() {
+        String text = Boolean.valueOf(isSmiling) + " " + Boolean.valueOf(isBlink);
         // Draw text in the canvas.
-        canvas.drawText(text, textX, textY, paint);
-
-        // Send message to main UI thread to update the drawing to the main view special area.
-        surfaceHolder.unlockCanvasAndPost(canvas);
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
+        canvas.drawText(text, 100, 100, paint);
     }
 }
