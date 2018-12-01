@@ -6,9 +6,14 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.Random;
+
 public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
 
     private SurfaceHolder surfaceHolder = null;
+
+
+    private Random random = new Random(System.currentTimeMillis());
 
     private Thread thread = null;
 
@@ -41,6 +46,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private int cloudThreeX = 300;
 
     private Bitmap cake;
+    private Bitmap cakePic;
+    private Bitmap bottle;
     private int cakeX = -100;
     private boolean isCakeUp = false;
 
@@ -137,7 +144,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         dog2 = Bitmap.createScaledBitmap(raw, screenWidth / 5, screenHeight / 5, true);
 
         raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.cake);
-        cake = Bitmap.createScaledBitmap(raw, screenWidth / 10, screenHeight / 10, true);
+        cakePic = Bitmap.createScaledBitmap(raw, screenWidth / 10, screenHeight / 10, true);
+        cake = cakePic;
+
+        raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.bottle);
+        bottle = Bitmap.createScaledBitmap(raw, screenWidth / 10, screenHeight / 10, true);
 
         raw = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.road);
         road = Bitmap.createScaledBitmap(raw, screenWidth * 2, screenHeight / 20, true);
@@ -279,6 +290,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (cakeX < -500) {
             cakeX = screenWidth;
             isCakeUp = !isCakeUp;
+
+            if (random.nextBoolean()) {
+                cake = cakePic;
+            } else {
+                cake = bottle;
+            }
         }
     }
 
